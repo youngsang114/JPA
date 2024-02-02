@@ -14,12 +14,25 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Member member = em.find(Member.class, 1L);
-            member.setName("AAAAA");
+            Member member = new Member();
+            member.setUsername("A");
+            Member member2 = new Member();
+            member.setUsername("B");
+            Member member3 = new Member();
+            member.setUsername("C");
 
-            em.detach(member);
+            System.out.println("===================");
+            // DB SEQ =1    | 1
+            // DB SEQ =51   | 2
+            // DB SEQ =51   | 3
+            em.persist(member);
+            em.persist(member2);
+            em.persist(member3);
+            System.out.println("member1.id = " + member.getId());  //1,51
+            System.out.println("member2.id = " + member2.getId());  //MEM
+            System.out.println("member3.id = " + member3.getId());  //MEM
 
-            System.out.println("================================");
+            System.out.println("===================");
 
             tx.commit();
         }catch (Exception e){
