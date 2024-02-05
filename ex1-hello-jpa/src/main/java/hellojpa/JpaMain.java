@@ -5,6 +5,8 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 
+import java.util.List;
+
 public class JpaMain {
     public static void main(String[] args) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
@@ -14,25 +16,25 @@ public class JpaMain {
         tx.begin();
 
         try {
+            Team team= new Team();
+            team.setName("TeamA");
+            em.persist(team);
+
             Member member = new Member();
-            member.setUsername("A");
-            Member member2 = new Member();
-            member.setUsername("B");
-            Member member3 = new Member();
-            member.setUsername("C");
-
-            System.out.println("===================");
-            // DB SEQ =1    | 1
-            // DB SEQ =51   | 2
-            // DB SEQ =51   | 3
+            member.setUsername("member1");
+            member.changeTeam(team);
             em.persist(member);
-            em.persist(member2);
-            em.persist(member3);
-            System.out.println("member1.id = " + member.getId());  //1,51
-            System.out.println("member2.id = " + member2.getId());  //MEM
-            System.out.println("member3.id = " + member3.getId());  //MEM
 
-            System.out.println("===================");
+            em.flush();
+            em.clear();
+
+            Team findTeam = em.find(Team.class, team.getId());
+            List<Member> members = findTeam.getMembers();
+
+            System.out.println("==========================");
+            for (Member m : members) {
+                System.out.println("member = " + m.getUsername());
+            }
 
             tx.commit();
         }catch (Exception e){
