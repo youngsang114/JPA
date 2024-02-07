@@ -17,14 +17,21 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Member member = new Member();
-            member.setUsername("lim");
-            member.setCreatedBy("Yoo");
-            member.setCreatedDate(LocalDateTime.now());
-            em.persist(member);
+            Child child1 = new Child();
+            Child child2 = new Child();
+
+            Parent parent = new Parent();
+            parent.addChild(child1);
+            parent.addChild(child2);
+
+            em.persist(parent);
 
             em.flush();
             em.clear();
+
+            Parent findParent = em.find(Parent.class, parent.getId());
+            List<Child> childList = findParent.getChildList();
+            childList.remove(0);
 
 
             tx.commit();
