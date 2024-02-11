@@ -57,6 +57,7 @@ public class Member {
     }
 
     public Set<String> getFavoriteFoods() {
+
         return favoriteFoods;
     }
 
