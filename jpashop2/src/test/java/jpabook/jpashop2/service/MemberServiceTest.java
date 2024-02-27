@@ -2,8 +2,7 @@ package jpabook.jpashop2.service;
 
 import jakarta.persistence.EntityManager;
 import jpabook.jpashop2.domain.Member;
-import jpabook.jpashop2.repository.MemberRepository;
-import org.assertj.core.api.Assertions;
+import jpabook.jpashop2.repository.order.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +21,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class MemberServiceTest {
 
     @Autowired MemberService memberService;
-    @Autowired MemberRepository memberRepository;
+    @Autowired
+    MemberRepository memberRepository;
     @Autowired
     EntityManager em;
 
@@ -36,7 +36,7 @@ class MemberServiceTest {
         Long savedId = memberService.join(member);
         //then
 //        em.flush(); // 영속성 컨텍스트에 있는 것을 db에 반영 -> insert문 확인 가능!
-        assertThat(member).isEqualTo(memberRepository.findOne(savedId));
+        assertThat(member).isEqualTo(memberRepository.findById(savedId).get());
 
     }
     @Test
